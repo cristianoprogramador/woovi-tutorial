@@ -1,11 +1,13 @@
 "use client";
 
 import { parcelOptions } from "@/utils/mock";
+import { Button } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const CustomUncheckedIcon = () => {
@@ -35,6 +37,7 @@ const CustomCheckedIcon = () => {
 export default function HomePage() {
   const [checked, setChecked] = useState<string | null>(null);
   const secondArray = parcelOptions.slice(1);
+  const router = useRouter();
 
   const handleToggle = (id: string) => () => {
     if (checked === id) {
@@ -67,6 +70,12 @@ export default function HomePage() {
         ? "bg-[#03D69D]"
         : "bg-gray-200";
     return { borderClass, roundClass, lineClass };
+  };
+
+  const handleNextPage = () => {
+    if (checked !== null) {
+      router.push(`/pix-credit-card?id=${checked}`);
+    }
   };
 
   return (
@@ -212,6 +221,17 @@ export default function HomePage() {
                 );
               })}
             </List>
+
+            {checked !== null && (
+              <div className="flex w-full justify-center items-center mt-3">
+                <Button
+                  onClick={handleNextPage}
+                  className="bg-blue-700 hover:bg-blue-800 text-white"
+                  >
+                  Continue to next page
+                </Button>
+              </div>
+            )}
 
             <div className="flex flex-row justify-center gap-1 my-6 text-[#B2B2B2] text-sm">
               <div>
