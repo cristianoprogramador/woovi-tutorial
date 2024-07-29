@@ -4,7 +4,7 @@ import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   typography: {
-    fontFamily: "Nanito, sans-serif",
+    fontFamily: "Nunito, sans-serif",
   },
 });
 
