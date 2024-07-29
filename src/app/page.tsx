@@ -34,6 +34,7 @@ const CustomCheckedIcon = () => {
 
 export default function HomePage() {
   const [checked, setChecked] = useState<string | null>(null);
+  const secondArray = parcelOptions.slice(1);
 
   const handleToggle = (id: string) => () => {
     if (checked === id) {
@@ -41,6 +42,31 @@ export default function HomePage() {
     } else {
       setChecked(id);
     }
+  };
+
+  const getClassNames = (
+    index: number,
+    parcelOptionsLength: number,
+    checked: string | null,
+    valueId: string,
+    parcelOptions: { id: any }[]
+  ) => {
+    const borderClass =
+      checked === valueId ? "border-[#03D69D]" : "border-gray-300";
+    const roundClass =
+      index === 0
+        ? "rounded-t-lg border-t-2"
+        : index === parcelOptionsLength - 1
+        ? "rounded-b-lg border-b-2"
+        : "border-x-2 rounded-none";
+    const lineClass =
+      index === 0
+        ? "hidden"
+        : checked === parcelOptions[index].id ||
+          checked === parcelOptions[index - 1].id
+        ? "bg-[#03D69D]"
+        : "bg-gray-200";
+    return { borderClass, roundClass, lineClass };
   };
 
   return (
@@ -106,7 +132,7 @@ export default function HomePage() {
                       </div>
 
                       <div className="flex flex-row bg-[#133A6F] text-white font-semibold p-2 rounded-md mt-1 clip-corner text-sm gap-1">
-                      🤑
+                        🤑
                         <span className="font-extrabold">
                           {value.messageBold}
                         </span>
@@ -118,6 +144,97 @@ export default function HomePage() {
               );
             })}
           </List>
+
+          <div>
+            <List
+              dense
+              className="relative"
+              sx={{ width: "100%", marginTop: 3 }}
+            >
+              <div className="absolute -top-1 z-10 left-5 bg-[#E5E5E5] px-4 py-[1px] rounded-full font-extrabold">
+                Pix Parcelado
+              </div>
+              {secondArray.map((value, index) => {
+                const { borderClass, roundClass, lineClass } = getClassNames(
+                  index,
+                  secondArray.length,
+                  checked,
+                  value.id,
+                  secondArray
+                );
+                return (
+                  <ListItem key={index} disablePadding>
+                    <ListItemButton
+                      onClick={handleToggle(value.id)}
+                      sx={{ padding: 0 }}
+                    >
+                      <div
+                        className={`flex w-full border-x-2 flex-col ${borderClass} ${roundClass}`}
+                      >
+                        <div className={`w-full h-[2px] ${lineClass} `} />
+                        <div className="flex flex-col p-5">
+                          <div className="absolute top-3 right-3">
+                            <Checkbox
+                              edge="end"
+                              onChange={handleToggle(value.id)}
+                              checked={checked === value.id}
+                              icon={<CustomUncheckedIcon />}
+                              checkedIcon={<CustomCheckedIcon />}
+                            />
+                          </div>
+                          <div className="flex flex-row justify-between">
+                            <div className="flex flex-row gap-1 text-2xl">
+                              <div className="font-extrabold">
+                                {value.installments}x
+                              </div>
+                              <div className="font-semibold">
+                                {value.installmentAmount}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="text-[#AFAFAF] font-semibold">
+                            <div>Total: {value.total}</div>
+                          </div>
+
+                          {value.message && (
+                            <div className="flex flex-row bg-[#133A6F] text-white font-semibold p-2 rounded-md mt-1 clip-corner text-sm gap-1">
+                              <span className="font-extrabold">
+                                {value.messageBold}{" "}
+                              </span>
+                              {value.message}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </ListItemButton>
+                  </ListItem>
+                );
+              })}
+            </List>
+
+            <div className="flex flex-row justify-center gap-1 my-6 text-[#B2B2B2] text-sm">
+              <div>
+                <Image
+                  src={"/shield.png"}
+                  alt="shield"
+                  width={16}
+                  height={16}
+                />
+              </div>
+              <div className="text-center flex mt-[1px]">
+                Pagamento 100% seguro via:
+              </div>
+              <div>
+                <Image
+                  src={"/logo-woovi-gray.png"}
+                  alt="gray-logo"
+                  width={57}
+                  height={17}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </main>
